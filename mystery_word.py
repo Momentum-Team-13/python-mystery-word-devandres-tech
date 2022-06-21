@@ -1,6 +1,8 @@
+from tkinter import W
+
+
 def render_board(board):
     board_list = []
-    print(board)
     for item in board:
         if not item[1]:
             board_list.append('_')
@@ -15,6 +17,7 @@ def validate_user_input(guesses_left):
     while len(user_input) > 1:
         user_input = input('Please enter a single letter:\n')
     else:
+
         return user_input
 
 
@@ -26,9 +29,17 @@ def build_board(word):
 
 
 def validate_board(user_guess, board):
+    letters = []
+    invalid_guess = False
     for item in board:
         if item[0] == user_guess:
             item[1] = True
+
+    for item in board:
+        letters.append(item[0])
+    if user_guess not in letters:
+        invalid_guess = True
+    return invalid_guess
 
 
 def play_game():
@@ -42,11 +53,20 @@ def play_game():
         render_board(board)
 
         user_guess = validate_user_input(guesses_left)
-        validate_board(user_guess, board)
-        while user_guess != 'y':
+        invalid_guess = validate_board(user_guess, board)
+        if invalid_guess:
+            print('Wrong guess')
+            guesses_left = guesses_left - 1
+
+        while guesses_left > 0:
             render_board(board)
             user_guess = validate_user_input(guesses_left)
-            validate_board(user_guess, board)
+            invalid_guess = validate_board(user_guess, board)
+            if invalid_guess:
+                print('Wrong guess')
+                guesses_left = guesses_left - 1 
+
+        print(f'You lost! correct word was {guess_word}')
 
 
 if __name__ == "__main__":
