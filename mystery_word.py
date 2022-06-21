@@ -10,6 +10,7 @@ def render_board(board):
             board_list.append(item[0])
     print(' '.join(blank for blank in board_list))
     print('\n')
+    return board_list
 
 
 def validate_user_input(guesses_left):
@@ -59,15 +60,16 @@ def play_game():
             guesses_left = guesses_left - 1
 
         while guesses_left > 0:
-            render_board(board)
+            board_list = render_board(board)
+            if '_' not in board_list:
+                print('Congrats you won!')
+                return
             user_guess = validate_user_input(guesses_left)
             invalid_guess = validate_board(user_guess, board)
             if invalid_guess:
                 print('Wrong guess')
                 guesses_left = guesses_left - 1 
-
-        print(f'You lost! correct word was {guess_word}')
-
+        print(f'You lost, you ran out of guesses! correct word was: {guess_word}')
 
 if __name__ == "__main__":
     play_game()
